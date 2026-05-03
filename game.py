@@ -91,10 +91,9 @@ def format_as_paths(nodes):
     return sequences
 
 
-def main():
+def test():
     all_words = fetch_words()
     candidates = select_words(all_words)
-    print(f"Selected words {candidates[0]} | {candidates[1]}")
     result = None
     invalid = -1
     while not result:
@@ -114,4 +113,4 @@ def main():
 
 
 if __name__ == "__main__":
-    main()
+    test()
