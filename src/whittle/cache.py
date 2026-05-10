@@ -2,7 +2,7 @@ import pickle
 from enum import Enum
 from pathlib import Path
 
-from constants import WORD_CACHE_FILE
+from whittle.constants import WORD_CACHE_FILE
 
 
 class CTypes(Enum):

@@ -1,9 +1,5 @@
-if __name__ == "__main__":
-    from classes import Node
-    from words import fetch_words, lookup_word, select_words, slice
-else:
-    from .classes import Node
-    from .words import fetch_words, lookup_word, select_words, slice
+from whittle.classes import Node
+from whittle.words import fetch_words, lookup_word, select_words, slice
 
 
 def create_possible_paths(string):
@@ -91,7 +87,7 @@ def format_as_paths(nodes):
     return sequences
 
 
-def test():
+def generate_whittle():
     all_words = fetch_words()
     candidates = select_words(all_words)
     result = None
@@ -100,7 +96,7 @@ def test():
         invalid += 1
         candidates = select_words(all_words)
         result = find_solutions(candidates) or []
-        if result is not None and len(result) > 50:
+        if result is not None and len(result) > 15:
             result = None
 
     import random as r
@@ -111,6 +107,12 @@ def test():
     for i in range(0, 3):
         print(r.choice(result))
 
+    return {
+        "whittle": f"{candidates[0]} {candidates[1]}",
+        "solution_count": len(result),
+        "solutions": result,
+    }
+
 
 if __name__ == "__main__":
-    test()
+    generate_whittle()

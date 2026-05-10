@@ -5,9 +5,10 @@ from pathlib import Path
 from time import sleep
 
 import requests as req
-from cache import Cache, CTypes
-from classes import Word
-from constants import WORD_FILE_PATH, WORD_RANGE
+
+from whittle.cache import Cache, CTypes
+from whittle.classes import Word
+from whittle.constants import WORD_FILE_PATH, WORD_RANGE
 
 
 def fetch_words():
@@ -53,10 +54,8 @@ def lookup_word_from_api(word):
     match res.status_code:
         case 429:
             # Too many requests, wait a good bit before trying again
-            sleep(10)
             return lookup_word_from_api(word)
         case 404:
-            sleep(1)
             return None
 
     if "application/json" not in res.headers.get("Content-Type", ""):
