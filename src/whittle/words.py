@@ -48,23 +48,6 @@ def remove_words_from_file(words_to_remove):
         pickle.dump(words, word_pkl)
 
 
-def lookup_word_from_api(word):
-    url = f"https://api.dictionaryapi.dev/api/v2/entries/en/{word}"
-    res = req.get(url)
-    match res.status_code:
-        case 429:
-            # Too many requests, wait a good bit before trying again
-            return lookup_word_from_api(word)
-        case 404:
-            return None
-
-    if "application/json" not in res.headers.get("Content-Type", ""):
-        # Should probably log that something weird happend, this could cause big problems
-        return None
-
-    return res.json()[0]
-
-
 def lookup_word(word):
     if word == "":  # "" Is the final solution for the puzzle, so it is always valid
         return True
@@ -94,8 +77,7 @@ def select_words(words):
 
         if new_candidate:
             candidates.append(new_candidate)
-
-    return Word(candidates[0]), Word(candidates[1])
+    return Word(candidates[0], True), Word(candidates[1], True)
 
 
 def slice(word, i):

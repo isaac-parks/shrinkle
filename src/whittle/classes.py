@@ -1,3 +1,6 @@
+import requests as req
+
+
 class Definition:
     def __init__(self, meaning_data):
         self.part_of_speech = meaning_data.get("partOfSpeech")
@@ -9,26 +12,40 @@ class Definition:
 
 
 class Word:
-    def __init__(self, word_data):
-        if isinstance(word_data, str):
-            self.word = word_data
-            return
-        elif isinstance(word_data, dict):
-            self.word = word_data.get("word", "")
+    def __init__(self, word, sparce=False):
+        if sparce:
+            self.word = word
             self.definitions = []
-            for meaning in word_data.get("meanings", ""):
-                if not meaning:
+            return
+        word_data = self.lookup_word_from_api(word) or {}
+
+        self.word = word_data.get("word", "")
+        self.definitions = []
+        for meaning in word_data.get("meanings", ""):
+            if not meaning:
+                continue
+            for definition in meaning.get("definitions", ""):
+                if not definition:
                     continue
-                for definition in meaning.get("definitions", ""):
-                    if not definition:
-                        continue
-                    definition["partOfSpeech"] = meaning.get("partOfSpeech")
-                    self.definitions.append(Definition(definition))
-        else:
-            self.word = ""
+                definition["partOfSpeech"] = meaning.get("partOfSpeech")
+                self.definitions.append(Definition(definition))
 
     def __str__(self):
         return f'"{self.word}"'
+
+    def lookup_word_from_api(self, word):
+        url = f"https://api.dictionaryapi.dev/api/v2/entries/en/{word}"
+        res = req.get(url)
+        match res.status_code:
+            case 429:
+                return self.lookup_word_from_api(word)
+            case 404:
+                return None
+
+        if "application/json" not in res.headers.get("Content-Type", ""):
+            return None
+
+        return res.json()[0]
 
     def __add__(self, val):
         if isinstance(val, Word):
