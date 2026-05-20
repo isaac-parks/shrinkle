@@ -1,4 +1,5 @@
 from whittle.classes import Node
+from whittle.settings import MAX_RESULTS
 from whittle.words import fetch_words, lookup_word, select_words, slice
 
 
@@ -96,7 +97,7 @@ def generate_whittle():
         invalid += 1
         candidates = select_words(all_words)
         result = find_solutions(candidates) or []
-        if result is not None and len(result) > 15:
+        if result is not None and len(result) > MAX_RESULTS:
             result = None
 
     import random as r

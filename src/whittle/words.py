@@ -8,7 +8,7 @@ import requests as req
 
 from whittle.cache import Cache, CTypes
 from whittle.classes import Word
-from whittle.constants import WORD_FILE_PATH, WORD_RANGE
+from whittle.settings import WORD_FILE_PATH, WORD_RANGE
 
 
 def fetch_words():
