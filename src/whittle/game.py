@@ -2,7 +2,7 @@ import random as r
 
 from whittle.classes import Node
 from whittle.settings import MAX_RESULTS
-from whittle.words import fetch_words, lookup_word, select_words, slice
+from whittle.words import get_selectable_words, lookup_word, select_words, slice
 
 def create_possible_paths(string):
     if not string:
@@ -90,7 +90,7 @@ def format_as_paths(nodes):
 
 
 def generate_whittle(debug=False):
-    all_words = fetch_words()
+    all_words = get_selectable_words()
     candidates = select_words(all_words)
     result = None
     invalid = -1

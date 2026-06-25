@@ -22,14 +22,9 @@ class Cache:
     def configure_cache():
         if Cache._cache_configured:
             return
-
-        path = WORD_CACHE_FILE
-        p = Path(path)
-        p.touch(exist_ok=True)
-        with open(path, "rb") as file:
-            if p.stat().st_size != 0:
-                Cache._word_cache = pickle.load(file)
-
+        from whittle.words import get_raw_word_list
+        words = [w.lower() for w in get_raw_word_list()]
+        Cache._word_cache = words
         Cache._cache_configured = True
 
     @staticmethod

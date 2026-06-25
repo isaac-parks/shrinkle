@@ -1,17 +1,13 @@
-import pickle
 import random
-import re
-from pathlib import Path
-from time import sleep
 
 import requests as req
 
 from whittle.cache import Cache, CTypes
 from whittle.classes import Word
-from whittle.settings import WORD_FILE_PATH, WORD_RANGE
+from whittle.settings import WORD_RANGE
 
 
-def fetch_words():
+def get_raw_word_list():
     url = "https://raw.githubusercontent.com/isaac-parks/scrabble/refs/heads/master/dictionary.txt"
     res = req.get(url)
     if res.status_code != 200:
@@ -21,10 +17,16 @@ def fetch_words():
     words = raw_string.split("\n")
     words.append("a")
     words.append("i")
-    for w in words:
-        Cache.add(w.lower())
 
-    return clean_words(words)
+    return words
+
+
+def get_selectable_words():
+    all_words = get_raw_word_list()
+    for w in all_words: # ????????
+        Cache.add(w.lower()) # ???????
+
+    return clean_words(all_words)
 
 
 def clean_words(words):
@@ -34,18 +36,6 @@ def clean_words(words):
             clean.add(word.lower())
 
     return list(clean)
-
-
-def remove_words_from_file(words_to_remove):
-    words = []
-    with open(WORD_FILE_PATH, "rb") as word_pkl:
-        words = pickle.load(word_pkl)
-
-    for word in words_to_remove:
-        words.remove(word)
-
-    with open(WORD_FILE_PATH, "wb") as word_pkl:
-        pickle.dump(words, word_pkl)
 
 
 def lookup_word(word):
