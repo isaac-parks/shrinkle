@@ -23,7 +23,7 @@ class Cache:
         if Cache._cache_configured:
             return
         from whittle.words import get_raw_word_list
-        words = [w.lower() for w in get_raw_word_list()]
+        words = set([w.lower() for w in get_raw_word_list()])
         Cache._word_cache = words
         Cache._cache_configured = True
 
