@@ -1,7 +1,8 @@
+import random as r
+
 from whittle.classes import Node
 from whittle.settings import MAX_RESULTS
 from whittle.words import fetch_words, lookup_word, select_words, slice
-
 
 def create_possible_paths(string):
     if not string:
@@ -88,7 +89,7 @@ def format_as_paths(nodes):
     return sequences
 
 
-def generate_whittle():
+def generate_whittle(debug=False):
     all_words = fetch_words()
     candidates = select_words(all_words)
     result = None
@@ -100,13 +101,12 @@ def generate_whittle():
         if result is not None and len(result) > MAX_RESULTS:
             result = None
 
-    import random as r
-
-    print("Attempts: ", invalid)
-    print(f"Words - {candidates[0]} | {candidates[1]}")
-    print(f"Solution count: {len(result)}")
-    for i in range(0, 3):
-        print(r.choice(result))
+    if debug:
+        print("Attempts: ", invalid)
+        print(f"Words - {candidates[0]} | {candidates[1]}")
+        print(f"Solution count: {len(result)}")
+        for i in range(0, 3):
+            print(r.choice(result))
 
     return {
         "whittle": f"{candidates[0]} {candidates[1]}",
@@ -116,4 +116,4 @@ def generate_whittle():
 
 
 if __name__ == "__main__":
-    generate_whittle()
+    generate_whittle(True)
